@@ -1,0 +1,4 @@
+spotifyscraper
+yt-dlp
+mutagen
+requests
