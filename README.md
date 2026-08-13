@@ -9,6 +9,26 @@ Desde febrero de 2026, Spotify exige cuenta **Premium** para crear una app en el
 Este proyecto evita ese requisito por completo: lee la metadata de la playlist desde la página pública de Spotify (la misma que usan los widgets embebidos), y descarga el audio real desde YouTube.
 
 ## Arquitectura
+
+```
+Spotify (metadata pública, sin login)
+        │  spotifyscraper
+        ▼
+lista de tracks [título, artista, álbum, duración, portada]
+        │
+        ▼
+yt-dlp busca "artista - título" en YouTube (5 candidatos)
+        │  elige el de duración más cercana (±6s) a la de Spotify
+        ▼
+descarga el audio y lo convierte a MP3 192kbps (ffmpeg vía yt-dlp)
+        │
+        ▼
+mutagen inyecta tags ID3 (título, artista, álbum, portada) desde la metadata real de Spotify
+        │
+        ▼
+./descargas/{Nombre de playlist}/{Artista} - {Título}.mp3
+```
+
 ## Stack
 
 - [`spotifyscraper`](https://pypi.org/project/spotifyscraper/) — metadata de Spotify sin login ni API key
